@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+	    <script type="text/javascript" src="echarts.js"></script>
+	    <script type="text/javascript" src="bubbleUtil.js"></script>
+<!--		<script type="text/javascript" src="require.js"></script>-->
+    </head>
+    <body>
+	
+      <div style="width:1000px; height: 700px;overflow: auto">
+        <div id="container"></div>
+			</div>
+      <div style="width:300px; height: 300px;overflow: auto">
+	      <div id="container2" style="width: 300px;height: 300px;border: 1px solid #dadada"></div>
+			</div>
+			<div id="tooltip"> </div>
+      <script>
+		      
+          // 入参说明:
+          // 1. data 原始气泡数据，是一个对象数组，形如[{name: '可乐', amount: 49}]
+          // 2. format 数组依次指定气泡中展示的名称以及影响气泡大小的数据值, 形如['name', 'amount']
+          // 3. dom 气泡图绘制所需要的dom id名
+          // function initBubbleChart (data = [], format = [], dom) {
+          //     let [maxValue, temp] = [0, []]
+          //     data.forEach(item => {
+          //         temp.push(item[format[1]])
+          //     })
+          //     maxValue = Math.max.apply(null, temp)
+					//
+          //     // 气泡颜色数组
+          //     let color = [
+          //         '#FFB600', '#886CFF', '#0084FF',
+          //         '#4CB690','#58B458', '#6C6C6C',
+          //         '#F56161', '#FC754C','#5F5EEC'
+          //     ]
+          //     // 气泡颜色备份
+          //     let bakeColor = [...color]
+          //     // 气泡数据
+          //     let bubbleData  = []
+          //     // 气泡基础大小
+          //     let basicSize = 70
+          //     // 节点之间的斥力因子,值越大,气泡间距越大
+          //     let repulsion = 70
+          //     // 根据气泡数量配置基础大小和斥力因子（以实际情况进行适当调整，使气泡合理分布）
+          //     if (data.length >= 5 && data.length < 10) {
+          //         basicSize = 50
+          //         repulsion = 230
+          //     }
+          //     if (data.length >= 10 && data.length < 20) {
+          //         basicSize = 40
+          //         repulsion = 150
+          //     } else if (data.length >= 20) {
+          //         basicSize = 30
+          //         repulsion = 75
+          //     }
+					//
+          //     // 填充气泡数据数组bubbleData
+          //     for (let item of data) {
+          //         // 确保气泡数据条数少于或等于气泡颜色数组大小时，气泡颜色不重复
+          //         if (!bakeColor.length) bakeColor = [...color]
+          //         let colorSet = new Set(bakeColor)
+          //         let curIndex = Math.round(Math.random()*(colorSet.size - 1))
+          //         let curColor = bakeColor[curIndex]
+          //         colorSet.delete(curColor)
+          //         bakeColor = [...colorSet]
+          //         // 气泡大小设置
+          //         let size = (item[format[1]] * basicSize * 2) / maxValue
+          //         if (size < basicSize) size = basicSize
+					//
+          //         bubbleData.push({
+          //             "name": item[format[0]],
+          //             "value": item[format[1]],
+          //             "symbolSize": size,
+          //             "draggable": true,
+          //             "itemStyle": {
+          //                 "normal": {"color": curColor}
+          //             }
+          //         })
+          //     }
+					//
+          //     let bubbleId = document.getElementById(dom)
+          //     let bubbleChart = echarts.init(bubbleId)
+          //     let bubbleOptions = {
+          //         backgroundColor: '#fff',
+          //         animationEasingUpdate: 'bounceIn',
+          //         series: [{
+          //             type: 'graph',
+          //             layout: 'force',
+          //             force: {
+          //                 repulsion: repulsion,
+          //                 edgeLength: 10
+          //             },
+          //             // 是否开启鼠标缩放和平移漫游
+          //             roam: false,
+          //             label: {normal: {show: true}},
+          //             data: bubbleData
+          //         }]
+          //     }
+          //     console.log(bubbleData);
+          //     bubbleChart.setOption(bubbleOptions)
+          // }
+
+          // let data = [
+          //     {label: '可乐', amount: 100},
+          //     {label: '雪碧', amount: 70},
+          //     {label: '土豆', amount: 30},
+          //     {label: '饼干', amount: 50}
+          // ]
+
+          window.onload = function(){
+            // initBubbleChart(data, ['label', 'amount'], 'container2')
+
+              var data1 = [
+	                  [
+	              {"name":"广东20家", "value":8, isCenter: true},
+	              {"name":"猕猴桃", "value":4, type: '研发'},
+	              {"name":"枣子", "value":8, type: '研发'},
+	              {"name":"西红柿", "value":12, type: '生产'} ,
+	              {"name":"香蕉", "value":8, type: '研发'} ,
+	              {"name":"大米", "value":4, type: '生产'} ,
+	            ],
+	            // [
+	            //   {"name":"上海5家", "value":8, isCenter: true, isMaxCity: true},
+	            //   {"name":"黄瓜", "value":12, type: '研发'},
+	            //   {"name":"枣子", "value":16, type: '研发'},
+	            //   {"name":"西红柿", "value":22, type: '销售'} ,
+	            //   {"name":"西红柿", "value":22, type: '其他'} ,
+	            //   {"name":"西红柿", "value":22, type: '研发'} ,
+	            //   {"name":"香蕉", "value":6, type: '生产'} ,
+	            //   {"name":"大米", "value":9, type: '研发'} ,
+	            // ],
+	            // [
+	            //     {"name":"重庆8家", "value":567111, isCenter: true, isMaxCity: true},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"黄瓜", "value":2222},
+	            //     {"name":"黄瓜", "value":2222},
+	            //     {"name":"黄瓜", "value":2222},
+	            //     {"name":"西红柿", "value":1634} ,
+	            // ],
+	            // [
+	            //     {"name":"北京19家", "value":73145, isCenter: true},
+	            //     {"name":"黄瓜", "value":2222},
+	            //     {"name":"枣子", "value":567},
+	            //     {"name":"西红柿", "value":1634} ,
+	            //     {"name":"香蕉", "value":22} ,
+	            //     {"name":"大米", "value":45} ,
+	            // ],
+	            // [
+	            //     {"name":"深圳11家", "value":2222, isCenter: true},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"枣子", "value":567},
+	            //     {"name":"西红柿", "value":1634} ,
+	            //     {"name":"香蕉", "value":22} ,
+	            //     {"name":"大米", "value":45} ,
+	            // ],
+	            // [
+	            //     {"name":"深圳11家", "value":2222, isCenter: true},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"猕猴桃", "value":73145},
+	            //     {"name":"枣子", "value":567},
+	            //     {"name":"西红柿", "value":1634} ,
+	            //     {"name":"香蕉", "value":22} ,
+	            //     {"name":"大米", "value":45} ,
+	            // ]
+	          ];
+
+
+              // var data1 = [
+              //     {
+              //         "Region": "江苏省",
+              //         "InvestCompany": [
+              //             {
+              //                 "EName": "昆山智方达自动化科技有限公司",
+              //                 "EId": "ead2ba16-67b2-4419-b56c-8ae3052cd3e2",
+              //                 "EnterpriseId": "E2721298B205B6ABCEDA2A8B7B6A9266",
+              //                 "RegistCapi": 20.0,
+              //                 "ShouldCapi": 20.0,
+              //                 "StockPercentage": 1.0,
+              //                 "BusinessType": "研发",
+              //                 "InvestCount": 0,
+              //                 "CityName": "苏州市"
+              //             }
+              //         ]
+              //     },
+              //     {
+              //         "Region": "广东省",
+              //         "InvestCompany": [
+              //             {
+              //                 "EName": "深圳市智动精密设备有限公司",
+              //                 "EId": "52fcd847-2db5-4dce-ad60-104f2ea3344e",
+              //                 "EnterpriseId": "82979F0D1C25B6C34AE983995517E90F",
+              //                 "RegistCapi": 500.0,
+              //                 "ShouldCapi": 305.0,
+              //                 "StockPercentage": 0.61,
+              //                 "BusinessType": "生产",
+              //                 "InvestCount": 0,
+              //                 "CityName": "深圳市"
+              //             },
+              //             {
+              //                 "EName": "东莞市智立方自动化设备有限公司",
+              //                 "EId": "80281156-5e57-44b8-959f-d81b54ae59fb",
+              //                 "EnterpriseId": "974C22D70F788F21687CB2BB3547C203",
+              //                 "RegistCapi": 1000.0,
+              //                 "ShouldCapi": 1000.0,
+              //                 "StockPercentage": 1.0,
+              //                 "BusinessType": "生产",
+              //                 "InvestCount": 0,
+              //                 "CityName": "东莞市"
+              //             },
+              //             {
+              //                 "EName": "东莞市智宬捷精密制造技术有限公司",
+              //                 "EId": "ed7b6163-5e20-4714-9892-13d6c83665e9",
+              //                 "EnterpriseId": "B99D700E083A75956D81E6CBCB21BCED",
+              //                 "RegistCapi": 1000.0,
+              //                 "ShouldCapi": 700.0,
+              //                 "StockPercentage": 0.7,
+              //                 "BusinessType": "其他",
+              //                 "InvestCount": 0,
+              //                 "CityName": "东莞市"
+              //             },
+              //             {
+              //                 "EName": "深圳市添之慧工程技术有限公司",
+              //                 "EId": "dbcb2790-a893-4acd-a2ae-7c6df1f9846e",
+              //                 "EnterpriseId": "C53DF34F2B10FD47D640731F1DF3745D",
+              //                 "RegistCapi": 300.0,
+              //                 "ShouldCapi": 292.5,
+              //                 "StockPercentage": 0.975,
+              //                 "BusinessType": "服务",
+              //                 "InvestCount": 0,
+              //                 "CityName": "深圳市"
+              //             },
+              //             {
+              //                 "EName": "深圳市智立方自动化科技有限公司",
+              //                 "EId": "1eeb108a-1ded-4e4f-a8c4-14bd731d2324",
+              //                 "EnterpriseId": "98B52D6EAFF8FB143A03E8471ADD576A",
+              //                 "RegistCapi": 500.0,
+              //                 "ShouldCapi": 255.0,
+              //                 "StockPercentage": 1.0,
+              //                 "BusinessType": "生产",
+              //                 "InvestCount": 0,
+              //                 "CityName": "深圳市"
+              //             },
+              //             {
+              //                 "EName": "施耐博格精密系统（深圳）有限公司",
+              //                 "EId": "dc0ae530-c332-4e3b-a0fa-6fddd35117ac",
+              //                 "EnterpriseId": "CDCF12261FF51C373BCC550C786B0C73",
+              //                 "RegistCapi": 515.5425,
+              //                 "ShouldCapi": 164.5,
+              //                 "StockPercentage": 0.333333,
+              //                 "BusinessType": "生产",
+              //                 "InvestCount": 0,
+              //                 "CityName": "深圳市"
+              //             }
+              //         ]
+              //     }
+              // ];
+              window.renderBubbleChart(data1, document.getElementById('container'));
+          }
+      </script>
+    </body>
+</html>
